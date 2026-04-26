@@ -86,6 +86,18 @@ const services = [
       "Pressure washing is offered as a standalone service or bundled at a discount with any interior or exterior painting project.",
     ],
   },
+  {
+    slug: "ceiling-services",
+    title: "Ceiling Services",
+    description:
+      "Popcorn ceiling removal, drywall repair, smooth-ceiling refinishing, and ceiling repaints in Vero Beach. Knock down dated textures and erase Florida-humidity stains.",
+    body: [
+      "Popcorn (acoustic) ceilings instantly date a Vero Beach home — and they trap dust, hide cracks, and make rooms feel smaller. We safely scrape and remove popcorn texture, contain the dust, and haul away the debris.",
+      "After removal we skim-coat the drywall to a smooth Level-4 or Level-5 finish, prime, and repaint with a true flat ceiling-grade paint that hides roller marks and shadows.",
+      "Florida humidity is brutal on ceilings — we also handle water-stain blocking with shellac-based primer, mildew treatment, and full ceiling repaints in kitchens, bathrooms, garages, and lanais.",
+      "Prefer to keep some texture? We can re-apply knockdown or orange-peel finishes for a modern, easy-to-maintain look.",
+    ],
+  },
 ];
 
 // Real Vero Beach FL service areas
@@ -462,11 +474,11 @@ const main = async () => {
 
   for (const s of services) {
     routes.push({
+      ...s,
       path: `/services/${s.slug}`,
       title: `${s.title} in Vero Beach, FL | Elite Painting Solutions`,
       description: `${s.description} Free same-day estimates from licensed and insured Vero Beach painters. Call ${SITE_PHONE}.`,
       kind: "service",
-      ...s,
     });
   }
 

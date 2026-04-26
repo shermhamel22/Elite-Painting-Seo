@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 const serviceImages: Record<string, string> = {
   "interior-painting": "/gallery/softening-color.webp",
   "exterior-painting": "/gallery/beautiful-new-look.webp",
-  "cabinet-refinishing": "/gallery/finished-product.webp",
+  "cabinet-refinishing": "/gallery/cabinet-kitchen.png",
   "commercial-painting": "/gallery/how-we-do-it.webp",
   "pressure-washing": "/gallery/i-like-it.webp",
+  "ceiling-services": "/gallery/ceiling-popcorn.png",
 };
 
 export const Services = () => {

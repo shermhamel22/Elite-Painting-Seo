@@ -90,7 +90,13 @@ export const ChatBubble = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-40 flex items-end gap-2 sm:bottom-6 sm:right-6 sm:gap-3">
+    <div
+      className={`fixed z-40 flex gap-2 sm:bottom-6 sm:right-6 sm:left-auto sm:flex-row sm:items-end sm:gap-3 ${
+        open
+          ? "inset-x-3 bottom-3 flex-col items-stretch sm:inset-auto"
+          : "bottom-4 right-4 items-end"
+      }`}
+    >
       {!open && showTeaser && (
         <div className="relative hidden max-w-[260px] rounded-2xl rounded-br-sm bg-card p-4 shadow-elegant animate-scale-in sm:block">
           <button
@@ -116,7 +122,7 @@ export const ChatBubble = () => {
       )}
 
       {open && (
-        <div className="flex w-[340px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl bg-card shadow-elegant animate-scale-in sm:w-[380px]">
+        <div className="flex w-full flex-col overflow-hidden rounded-2xl bg-card shadow-elegant animate-scale-in sm:w-[380px]">
           <div className="flex items-center justify-between gap-3 bg-[#111] px-4 py-3 text-white">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white p-0.5">
@@ -198,7 +204,9 @@ export const ChatBubble = () => {
 
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#111] text-white shadow-glow transition-smooth hover:scale-110 hover:bg-primary"
+        className={`h-14 w-14 items-center justify-center self-end rounded-full bg-[#111] text-white shadow-glow transition-smooth hover:scale-110 hover:bg-primary sm:flex ${
+          open ? "hidden" : "flex"
+        }`}
         aria-label={open ? "Close chat" : "Open chat"}
       >
         {open ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}

@@ -18,6 +18,7 @@ export const navServices = [
   { label: "Cabinet Refinishing", href: "/services/cabinet-refinishing", slug: "cabinet-refinishing" },
   { label: "Commercial Painting", href: "/services/commercial-painting", slug: "commercial-painting" },
   { label: "Pressure Washing", href: "/services/pressure-washing", slug: "pressure-washing" },
+  { label: "Ceiling Services", href: "/services/ceiling-services", slug: "ceiling-services" },
 ];
 
 export const navAreas = [
@@ -106,6 +107,22 @@ export const services = [
       "Mildew, algae, and dirt removal",
       "Professional-grade equipment",
       "Standalone service or paired with painting",
+    ],
+  },
+  {
+    title: "Ceiling Services",
+    slug: "ceiling-services",
+    description:
+      "Popcorn ceiling removal, ceiling repair, and smooth ceiling repaints — modernize any room from the top down.",
+    href: "/services/ceiling-services",
+    long:
+      "Outdated popcorn (acoustic) ceilings make a room feel old and dingy. We safely scrape and remove popcorn texture, repair drywall imperfections, skim-coat to a smooth finish, and repaint with a flat ceiling-grade paint that hides shadows and roller marks. Florida humidity also stains ceilings — we handle water-stain blocking, mildew treatment, and full ceiling repaints in any room.",
+    bullets: [
+      "Popcorn / acoustic ceiling removal and disposal",
+      "Drywall repair, skim-coat, and smooth refinishing",
+      "Water-stain blocking and mildew treatment",
+      "Knockdown, orange-peel, or smooth texture finishes",
+      "Flat ceiling-grade paint that hides imperfections",
     ],
   },
 ];
