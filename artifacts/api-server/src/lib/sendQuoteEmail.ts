@@ -1,4 +1,4 @@
-import { getUncachableGmailClient } from "./gmailClient";
+import { Resend } from "resend";
 
 interface QuoteEmailParams {
   to: string | string[];
@@ -24,70 +24,19 @@ const escapeHtml = (raw: string) =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
-const buildRawMessage = ({
-  to,
-  from,
-  subject,
-  text,
-  html,
-}: {
-  to: string;
-  from: string;
-  subject: string;
-  text: string;
-  html?: string;
-}) => {
-  const encodedSubject = `=?utf-8?B?${Buffer.from(subject, "utf8").toString("base64")}?=`;
-
-  if (!html) {
-    const lines = [
-      `To: ${to}`,
-      `From: ${from}`,
-      `Subject: ${encodedSubject}`,
-      "MIME-Version: 1.0",
-      "Content-Type: text/plain; charset=utf-8",
-      "Content-Transfer-Encoding: 7bit",
-      "",
-      text,
-      "",
-    ];
-    return Buffer.from(lines.join("\r\n"), "utf8")
-      .toString("base64")
-      .replace(/\+/g, "-")
-      .replace(/\//g, "_")
-      .replace(/=+$/, "");
+const getResend = () => {
+  const apiKey = process.env["RESEND_API_KEY"];
+  if (!apiKey) {
+    throw new Error(
+      "RESEND_API_KEY is not set. Add it as a Replit secret to enable outbound email/SMS.",
+    );
   }
-
-  const boundary = `----=_Part_${Date.now()}_${Math.floor(Math.random() * 1e9)}`;
-  const lines = [
-    `To: ${to}`,
-    `From: ${from}`,
-    `Subject: ${encodedSubject}`,
-    "MIME-Version: 1.0",
-    `Content-Type: multipart/alternative; boundary="${boundary}"`,
-    "",
-    `--${boundary}`,
-    "Content-Type: text/plain; charset=utf-8",
-    "Content-Transfer-Encoding: 7bit",
-    "",
-    text,
-    "",
-    `--${boundary}`,
-    "Content-Type: text/html; charset=utf-8",
-    "Content-Transfer-Encoding: 7bit",
-    "",
-    html,
-    "",
-    `--${boundary}--`,
-    "",
-  ];
-
-  return Buffer.from(lines.join("\r\n"), "utf8")
-    .toString("base64")
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  return new Resend(apiKey);
 };
+
+const getFromAddress = () =>
+  process.env["RESEND_FROM"] ||
+  "Elite Painting Solutions <onboarding@resend.dev>";
 
 export const sendQuoteEmail = async ({
   to,
@@ -96,11 +45,10 @@ export const sendQuoteEmail = async ({
   message,
   source,
 }: QuoteEmailParams) => {
-  const gmail = await getUncachableGmailClient();
+  const resend = getResend();
+  const from = getFromAddress();
 
-  const profile = await gmail.users.getProfile({ userId: "me" });
-  const fromAddress = profile.data.emailAddress ?? (Array.isArray(to) ? to[0] : to);
-
+  const recipients = Array.isArray(to) ? to : [to];
   const subject = `New quote request — ${name}`;
 
   const text = [
@@ -135,32 +83,34 @@ export const sendQuoteEmail = async ({
     </div>
   `;
 
-  const recipients = Array.isArray(to) ? to : [to];
+  const { error } = await resend.emails.send({
+    from,
+    to: recipients,
+    subject,
+    text,
+    html,
+    replyTo: phone ? undefined : undefined,
+  });
 
-  for (const recipient of recipients) {
-    const raw = buildRawMessage({
-      to: recipient,
-      from: fromAddress,
-      subject,
-      text,
-      html,
-    });
-
-    await gmail.users.messages.send({
-      userId: "me",
-      requestBody: { raw },
-    });
+  if (error) {
+    throw new Error(
+      `Resend send failed: ${error.name || "error"} — ${error.message || JSON.stringify(error)}`,
+    );
   }
 };
 
 /**
  * Send a short text-friendly notification to a US phone number using
  * carrier email-to-SMS gateways. Carrier-unknown numbers are blasted to
- * every major gateway; the wrong-carrier ones bounce silently and the
- * one matching the phone's carrier delivers as a regular text.
+ * every major gateway; the wrong-carrier copies bounce silently and the
+ * matching carrier delivers as a regular text.
  *
- * This is a best-effort free fallback. For guaranteed delivery use Twilio
- * or another paid SMS API.
+ * REQUIREMENT: Resend domain verification. Without a verified domain the
+ * Resend free tier only sends to your account's signup email, so the
+ * gateway addresses below are rejected. Verify your domain (e.g.
+ * elitepaintingsolutions.com) in the Resend dashboard for SMS to flow.
+ *
+ * Best-effort: do NOT throw here, the calling route swallows failures.
  */
 export const sendQuoteSmsViaGateway = async ({
   phoneDigits,
@@ -169,22 +119,17 @@ export const sendQuoteSmsViaGateway = async ({
   message,
   source,
 }: QuoteSmsParams) => {
-  const gmail = await getUncachableGmailClient();
+  const resend = getResend();
+  const from = getFromAddress();
 
-  const profile = await gmail.users.getProfile({ userId: "me" });
-  const fromAddress = profile.data.emailAddress ?? "noreply@example.com";
-
-  // Normalize to last 10 digits.
   const ten = phoneDigits.replace(/\D/g, "").slice(-10);
   if (ten.length !== 10) return;
 
-  // Common US carrier email-to-SMS gateways. We send to all of them; only
-  // the carrier matching the destination phone delivers, others bounce.
   const gateways = [
     "txt.att.net", // AT&T (SMS)
     "tmomail.net", // T-Mobile / Sprint (SMS+MMS)
-    "vtext.com", // Verizon (SMS, mostly retired but still routes for some)
-    "vzwpix.com", // Verizon (MMS, currently the working path)
+    "vtext.com", // Verizon (legacy SMS)
+    "vzwpix.com", // Verizon (MMS, current path)
     "messaging.sprintpcs.com", // legacy Sprint
     "sms.myboostmobile.com", // Boost
     "sms.cricketwireless.net", // Cricket
@@ -194,7 +139,6 @@ export const sendQuoteSmsViaGateway = async ({
     "vmobl.com", // Virgin
   ];
 
-  // Texts must be SHORT to fit in a single SMS segment.
   const trimmed = message.trim().replace(/\s+/g, " ").slice(0, 220);
   const subject = `Quote: ${name}`.slice(0, 50);
   const body = [
@@ -207,17 +151,13 @@ export const sendQuoteSmsViaGateway = async ({
   ].join("\n");
 
   await Promise.allSettled(
-    gateways.map((gw) => {
-      const raw = buildRawMessage({
+    gateways.map((gw) =>
+      resend.emails.send({
+        from,
         to: `${ten}@${gw}`,
-        from: fromAddress,
         subject,
         text: body,
-      });
-      return gmail.users.messages.send({
-        userId: "me",
-        requestBody: { raw },
-      });
-    }),
+      }),
+    ),
   );
 };
