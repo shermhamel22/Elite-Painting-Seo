@@ -149,27 +149,20 @@ const serviceFaqs = {
   ],
 };
 
-// Real Vero Beach FL service areas
+// Real Vero Beach FL service areas — must stay in sync with navAreas in
+// src/data/site.ts so the live React UI, prerendered HTML, and sitemap.xml
+// all expose the same set of /areas/* pages.
 const areas = [
   "Vero Beach",
   "Sebastian",
-  "Fellsmere",
   "Indian River Shores",
+  "Fellsmere",
   "Wabasso",
   "Roseland",
   "Gifford",
   "Florida Ridge",
   "Vero Lake Estates",
   "Winter Beach",
-  "Orchid",
-  "South Beach",
-  "Central Beach",
-  "Grand Harbor",
-  "John's Island",
-  "Castaway Cove",
-  "The Moorings",
-  "Bent Pine",
-  "Riomar",
 ];
 
 // Approximate centroids for each Vero Beach service area, used to mint

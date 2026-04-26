@@ -30,8 +30,8 @@ export const Areas = () => {
         {/* Google Maps */}
         <div className="mx-auto mt-14 max-w-5xl overflow-hidden rounded-2xl border border-white/10">
           <iframe
-            title="Service Area Map"
-            src="https://maps.google.com/maps?q=painting+contractors&t=&z=11&ie=UTF8&iwloc=&output=embed"
+            title="Vero Beach, FL — Elite Painting Solutions Service Area"
+            src="https://maps.google.com/maps?q=Vero+Beach%2C+FL&t=&z=12&ie=UTF8&iwloc=&output=embed"
             width="100%"
             height="420"
             style={{ border: 0, display: "block" }}

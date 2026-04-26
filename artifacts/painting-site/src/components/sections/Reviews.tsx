@@ -1,7 +1,7 @@
-import { reviews } from "@/data/site";
+import { reviews, site } from "@/data/site";
 import { ArrowUpRight, Star } from "lucide-react";
 
-const GOOGLE_PROFILE = "https://share.google/DRW7z7hFTI5CgQYNr";
+const GOOGLE_PROFILE = site.googleReviewsUrl;
 
 const Stars = () => (
   <div className="flex items-center gap-0.5 text-[#F5C518]">
@@ -57,17 +57,25 @@ export const Reviews = () => {
               key={i}
               className="w-[320px] shrink-0 sm:w-[380px] md:w-[420px]"
             >
-              <article className="flex h-full flex-col rounded-xl border border-white/10 bg-[#161616] p-6 transition-colors hover:border-white/20">
-                <header className="flex items-start justify-between gap-3">
-                  <h3 className="font-display text-base font-black uppercase tracking-wide text-white">
-                    {r.name}
-                  </h3>
-                  <Stars />
-                </header>
-                <p className="mt-4 whitespace-normal text-[14px] leading-[1.65] text-white/65">
-                  {r.text}
-                </p>
-              </article>
+              <a
+                href={GOOGLE_PROFILE}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Read ${r.name}'s 5-star Google review of Elite Painting Solutions`}
+                className="block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d] rounded-xl"
+              >
+                <article className="flex h-full flex-col rounded-xl border border-white/10 bg-[#161616] p-6 transition-colors hover:border-primary/50 hover:bg-[#1a1a1a]">
+                  <header className="flex items-start justify-between gap-3">
+                    <h3 className="font-display text-base font-black uppercase tracking-wide text-white">
+                      {r.name}
+                    </h3>
+                    <Stars />
+                  </header>
+                  <p className="mt-4 whitespace-normal text-[14px] leading-[1.65] text-white/65">
+                    {r.text}
+                  </p>
+                </article>
+              </a>
             </li>
           ))}
         </ul>

@@ -70,10 +70,17 @@ const BlogPost = () => {
             </span>
           </div>
 
-          <div
-            className="aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-card mb-10"
-            style={{ backgroundImage: "linear-gradient(135deg, hsl(220 30% 12%), hsl(220 50% 22%))" }}
-          />
+          <div className="aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-card mb-10 bg-secondary">
+            <img
+              src={post.image}
+              alt={post.imageAlt}
+              width={1280}
+              height={720}
+              decoding="async"
+              fetchPriority="high"
+              className="h-full w-full object-cover"
+            />
+          </div>
 
           <div className="prose prose-lg max-w-none text-foreground">
             <p className="text-lg leading-relaxed text-muted-foreground">{content}</p>

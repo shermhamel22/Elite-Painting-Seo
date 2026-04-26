@@ -28,27 +28,33 @@ const ReviewsPage = () => {
         <div className="container-tight">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {reviews.map((r, i) => (
-              <article
+              <a
                 key={i}
-                className="flex flex-col rounded-2xl bg-card p-7 shadow-card animate-fade-in"
+                href={site.googleReviewsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Read ${r.name}'s 5-star Google review of Elite Painting Solutions`}
+                className="block animate-fade-in focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
                 style={{ animationDelay: `${i * 80}ms`, animationFillMode: "both" }}
               >
-                <div className="mb-3 flex gap-0.5 text-primary">
-                  {Array.from({ length: r.rating }).map((_, idx) => (
-                    <Star key={idx} className="h-5 w-5" fill="currentColor" strokeWidth={0} />
-                  ))}
-                </div>
-                <p className="flex-1 leading-relaxed text-muted-foreground">"{r.text}"</p>
-                <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#111] font-display font-black text-white">
-                    {r.name.charAt(0)}
+                <article className="flex h-full flex-col rounded-2xl bg-card p-7 shadow-card transition-smooth hover:-translate-y-1 hover:shadow-elegant">
+                  <div className="mb-3 flex gap-0.5 text-primary">
+                    {Array.from({ length: r.rating }).map((_, idx) => (
+                      <Star key={idx} className="h-5 w-5" fill="currentColor" strokeWidth={0} />
+                    ))}
                   </div>
-                  <div>
-                    <div className="font-display font-black text-secondary">{r.name}</div>
-                    <div className="text-xs text-muted-foreground">Verified Customer</div>
+                  <p className="flex-1 leading-relaxed text-muted-foreground">"{r.text}"</p>
+                  <div className="mt-6 flex items-center gap-3 border-t border-border pt-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#111] font-display font-black text-white">
+                      {r.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-display font-black text-secondary">{r.name}</div>
+                      <div className="text-xs text-muted-foreground">Verified Google Customer</div>
+                    </div>
                   </div>
-                </div>
-              </article>
+                </article>
+              </a>
             ))}
           </div>
 
