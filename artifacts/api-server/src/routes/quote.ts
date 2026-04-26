@@ -4,15 +4,23 @@ import { sendQuoteEmail, sendQuoteSmsViaGateway } from "../lib/sendQuoteEmail";
 const router: IRouter = Router();
 
 // Email recipients that always get a copy of every quote request.
-const QUOTE_EMAIL_RECIPIENTS = [
-  "eps.paintingsolutions@gmail.com",
-  "sprintfast2xx@gmail.com",
-];
+// Override with QUOTE_EMAIL_TO env var (comma-separated). Default falls
+// back to the Resend account's verified signup email so this works out of
+// the box on the Resend free tier (which only delivers to your own email
+// until you verify a domain).
+const QUOTE_EMAIL_RECIPIENTS = (
+  process.env["QUOTE_EMAIL_TO"] || "sherm3@mailfence.com"
+)
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 
 // US phone number that should receive an SMS for every quote request, via
 // carrier email-to-SMS gateways. Best effort — wrong-carrier copies bounce
 // silently, the matching carrier delivers a regular text message.
-const QUOTE_SMS_PHONE = "3214629989";
+// Requires a verified domain on Resend (set RESEND_FROM) for the gateway
+// addresses to be accepted.
+const QUOTE_SMS_PHONE = process.env["QUOTE_SMS_PHONE"] || "3214629989";
 
 router.post("/quote", async (req, res) => {
   const { name, phone, message, source } = req.body ?? {};
