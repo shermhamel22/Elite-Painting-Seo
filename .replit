@@ -35,5 +35,5 @@ externalPort = 3000
 
 [userenv.shared]
 GEMINI_API_KEY = "AIzaSyCdP283MvKllOhXif8pZWXIW8sT1TK2C0k"
-RESEND_API_KEY = "re_dR2WFBLf_29UGoCzyZqQw1DgeWpDMcTU1"
+RESEND_API_KEY = "re_9MqivhFQ_JvRxa9VGV1TP67sNAVc3SBgX"
 QUOTE_EMAIL_TO = "sprintfast2xx@gmail.com"
