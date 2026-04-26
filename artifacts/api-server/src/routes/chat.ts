@@ -70,9 +70,9 @@ router.post("/chat", async (req, res) => {
     return res.status(400).json({ error: "Message too long" });
   }
 
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) {
-    logger.error("GEMINI_API_KEY is not set");
+  const cfg = getGeminiConfig();
+  if (!cfg) {
+    logger.error("Gemini is not configured (no AI_INTEGRATIONS_GEMINI_* or GEMINI_API_KEY)");
     return res
       .status(503)
       .json({ error: "Chat is temporarily unavailable. Please call (772) 539-2115." });
@@ -103,7 +103,7 @@ router.post("/chat", async (req, res) => {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 25_000);
 
-    const r = await fetch(`${GEMINI_ENDPOINT}?key=${encodeURIComponent(apiKey)}`, {
+    const r = await fetch(`${cfg.url}?key=${encodeURIComponent(cfg.apiKey)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
