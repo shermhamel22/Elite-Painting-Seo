@@ -1,0 +1,137 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Arial",
+      "role": "body"
+    },
+    {
+      "family": "Helvetica Neue",
+      "role": "body"
+    },
+    {
+      "family": "Open Sans",
+      "role": "body"
+    },
+    {
+      "family": "Poppins",
+      "role": "unknown"
+    },
+    {
+      "family": "Times New Roman",
+      "role": "unknown"
+    }
+  ],
+  "colors": {
+    "primary": "#D71616",
+    "accent": "#D71616",
+    "background": "#F7F7F7",
+    "textPrimary": "#6B6D6F",
+    "link": "#007692"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Arial",
+      "heading": "Arial"
+    },
+    "fontStacks": {
+      "heading": [
+        "Poppins",
+        "Helvetica Neue",
+        "Helvetica",
+        "Arial",
+        "sans-serif"
+      ],
+      "body": [
+        "Times New Roman"
+      ],
+      "paragraph": [
+        "Open Sans",
+        "Helvetica Neue",
+        "Helvetica",
+        "Arial",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "28px",
+      "h2": "28px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "4px"
+  },
+  "components": {
+    "input": {
+      "background": "#FFFFFF",
+      "textColor": "#2D2E2F",
+      "borderColor": null,
+      "borderRadius": "4px",
+      "borderRadiusCorners": {
+        "topLeft": "4px",
+        "topRight": "4px",
+        "bottomRight": "4px",
+        "bottomLeft": "4px"
+      },
+      "shadow": "rgb(200, 201, 202) 0px 0px 0px 1px inset"
+    },
+    "buttonPrimary": {
+      "background": "#D71616",
+      "textColor": "#FFFFFF",
+      "borderColor": "#D71616",
+      "borderRadius": "20px",
+      "borderRadiusCorners": {
+        "topLeft": "20px",
+        "topRight": "20px",
+        "bottomRight": "20px",
+        "bottomLeft": "20px"
+      },
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": null,
+    "favicon": "File saved at: attached_assets/favicon.svg",
+    "ogImage": "File saved at: attached_assets/ogImage.png"
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Add photos",
+      "reasoning": "The button 'Add photos' has a vibrant red color (#D71616), which is typically used for primary actions. It stands out as the main call-to-action on the page."
+    },
+    "secondary": {
+      "index": -1,
+      "text": "N/A",
+      "reasoning": "There is only one button detected, so no secondary button can be selected."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "professional",
+    "energy": "medium",
+    "targetAudience": "homeowners and businesses looking for painting services"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": ""
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  },
+  "__llm_metadata": {
+    "logoSelection": {
+      "llmCalled": false,
+      "llmSucceeded": false,
+      "finalSource": "none"
+    },
+    "buttonClassification": {
+      "llmCalled": true,
+      "llmSucceeded": true
+    }
+  }
+}
