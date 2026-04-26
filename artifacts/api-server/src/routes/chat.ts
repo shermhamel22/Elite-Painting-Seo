@@ -4,7 +4,26 @@ import { logger } from "../lib/logger";
 const router: IRouter = Router();
 
 const GEMINI_MODEL = "gemini-2.5-flash";
-const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+
+function getGeminiConfig(): { url: string; apiKey: string } | null {
+  const replitBase = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL;
+  const replitKey = process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
+  if (replitBase && replitKey) {
+    const base = replitBase.replace(/\/+$/, "");
+    return {
+      url: `${base}/models/${GEMINI_MODEL}:generateContent`,
+      apiKey: replitKey,
+    };
+  }
+  const directKey = process.env.GEMINI_API_KEY;
+  if (directKey) {
+    return {
+      url: `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+      apiKey: directKey,
+    };
+  }
+  return null;
+}
 
 const SYSTEM_INSTRUCTION = `You are the friendly virtual assistant for Elite Painting Solutions, a top-rated painting company based in Vero Beach, Florida (32960) serving all of Indian River County.
 
