@@ -32,13 +32,19 @@ jobs:
         with:
           version: 9
 
+      - name: Clean Replit specific config
+        run: |
+          # Standard pnpm doesn't support Replit's custom security settings
+          # This safely removes those settings before installation
+          awk '/^packages:/,0' pnpm-workspace.yaml > clean.yaml
+          mv clean.yaml pnpm-workspace.yaml
+
       - name: Install dependencies
         run: pnpm install
 
       - name: Build project
         env:
           PORT: 3000
-          # This tells Vite to load assets from your GitHub Pages URL correctly
           BASE_PATH: /Elite-Painting-Seo/
         run: |
           pnpm run build
