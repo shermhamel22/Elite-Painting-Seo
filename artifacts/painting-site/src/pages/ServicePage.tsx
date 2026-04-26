@@ -4,14 +4,18 @@ import { PageLayout } from "@/components/PageLayout";
 import { PageHero } from "@/components/PageHero";
 import { QuoteForm } from "@/components/QuoteForm";
 import { SEO } from "@/components/SEO";
+import { FAQSection } from "@/components/FAQSection";
 import { services, site } from "@/data/site";
-import { breadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
+import { serviceFaqs } from "@/data/faqs";
+import { breadcrumbJsonLd, faqJsonLd, serviceJsonLd } from "@/lib/seo";
 
 const ServicePage = () => {
   const { slug } = useParams();
   const service = services.find((s) => s.slug === slug);
 
   if (!service) return <Navigate to="/404" replace />;
+
+  const faqs = serviceFaqs[service.slug] ?? [];
 
   return (
     <PageLayout>
@@ -25,6 +29,7 @@ const ServicePage = () => {
             { name: "Services", path: "/#services" },
             { name: service.title, path: service.href },
           ]),
+          ...(faqs.length ? [faqJsonLd(faqs)] : []),
         ]}
       />
 
@@ -93,6 +98,13 @@ const ServicePage = () => {
           </aside>
         </div>
       </section>
+
+      <FAQSection
+        eyebrow={service.title}
+        title={`${service.title} — Frequently Asked Questions`}
+        intro={`Everything Vero Beach homeowners ask us about ${service.title.toLowerCase()}. Don't see your question? Call ${site.phone} and we'll answer.`}
+        faqs={faqs}
+      />
     </PageLayout>
   );
 };

@@ -4,25 +4,34 @@ import { PageLayout } from "@/components/PageLayout";
 import { PageHero } from "@/components/PageHero";
 import { QuoteForm } from "@/components/QuoteForm";
 import { SEO } from "@/components/SEO";
-import { navAreas, services, site } from "@/data/site";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { FAQSection } from "@/components/FAQSection";
+import { areaSlug, navAreas, services, site } from "@/data/site";
+import { areaFaqsFor } from "@/data/faqs";
+import { areaLocalBusinessJsonLd, breadcrumbJsonLd, faqJsonLd } from "@/lib/seo";
 
 const AreaPage = () => {
   const { slug } = useParams();
-  const area = navAreas.find((a) => a.toLowerCase() === slug?.toLowerCase());
+  const area = navAreas.find((a) => areaSlug(a) === slug?.toLowerCase());
 
   if (!area) return <Navigate to="/404" replace />;
+
+  const areaPath = `/areas/${areaSlug(area)}`;
+  const faqs = areaFaqsFor(area);
 
   return (
     <PageLayout>
       <SEO
         title={`Professional Painters in ${area} | Elite Painting Solutions`}
         description={`Elite Painting Solutions provides expert interior, exterior, cabinet, and commercial painting in ${area}. Fully licensed & insured. Free estimates. Call today for a quote.`}
-        canonicalPath={`/areas/${area.toLowerCase()}`}
-        jsonLd={breadcrumbJsonLd([
-          { name: "Service Areas", path: "/#areas" },
-          { name: area, path: `/areas/${area.toLowerCase()}` },
-        ])}
+        canonicalPath={areaPath}
+        jsonLd={[
+          breadcrumbJsonLd([
+            { name: "Service Areas", path: "/#areas" },
+            { name: area, path: areaPath },
+          ]),
+          areaLocalBusinessJsonLd(area, areaPath),
+          faqJsonLd(faqs),
+        ]}
       />
 
       <PageHero
@@ -99,7 +108,7 @@ const AreaPage = () => {
               {navAreas.filter((a) => a !== area).slice(0, 8).map((a) => (
                 <Link
                   key={a}
-                  to={`/areas/${a.toLowerCase()}`}
+                  to={`/areas/${areaSlug(a)}`}
                   className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-secondary transition-smooth hover:border-[#111] hover:bg-[#111] hover:text-white"
                 >
                   <MapPin className="h-3.5 w-3.5" />
@@ -114,6 +123,13 @@ const AreaPage = () => {
           </aside>
         </div>
       </section>
+
+      <FAQSection
+        eyebrow={area}
+        title={`Painting Services in ${area} — FAQs`}
+        intro={`The most common questions ${area} homeowners ask before booking a painting project with us.`}
+        faqs={faqs}
+      />
     </PageLayout>
   );
 };

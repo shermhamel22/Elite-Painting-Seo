@@ -19,8 +19,18 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 - `src/index.css` does NOT import Google Fonts (was render-blocking) — fonts come via `<link>` in `index.html`.
 - `public/_headers` sets long cache (`/assets/*` immutable 1y, images 30d, fonts 1y, html 10min). Honored by Replit Deployments / Cloudflare Pages / Netlify.
 - `docs/dns-records.md` — copy-paste DNS records for SPF, DKIM, DMARC, optional CAA + MX.
-- Service-area routes are real Vero Beach neighborhoods (Sebastian, Indian River Shores, Wabasso, Gifford, Florida Ridge, Vero Lake Estates, Grand Harbor, John's Island, Riomar, etc.).
+- Service-area routes are real Vero Beach neighborhoods (Sebastian, Indian River Shores, Wabasso, Gifford, Florida Ridge, Vero Lake Estates, Grand Harbor, John's Island, Riomar, etc.). The slug helper `areaSlug()` in `src/data/site.ts` (and the equivalent regex in `scripts/postbuild.mjs`) handles multi-word area names so `/areas/indian-river-shores` resolves correctly at runtime AND in the prerendered HTML / sitemap.
 - Footer social: Google, Facebook, Yelp, Nextdoor (real URLs) + YouTube, X (placeholder URLs — replace when accounts exist). LinkedIn / Instagram intentionally omitted.
+
+## GEO (Generative Engine Optimization) Additions
+
+Optimized to maximize citation in AI Overviews, ChatGPT, Perplexity, and "People Also Ask":
+
+- **Per-service FAQs** (`src/data/faqs.ts` + mirror in `scripts/postbuild.mjs`) — 5 questions × 6 services. Rendered as a visible `FAQSection` accordion on every `/services/*` page AND emitted as `FAQPage` JSON-LD both in the React SEO component and in the prerendered HTML.
+- **Per-area FAQs** — area-templated FAQs ("Do you serve {AREA}?", "How much does it cost to paint a house in {AREA}?", etc.) on every `/areas/*` page + matching `FAQPage` JSON-LD.
+- **Per-area `LocalBusiness` schema** — each area page emits a Painter / HomeAndConstructionBusiness / LocalBusiness block with that area's specific lat/lng GeoCoordinates and ZIP, hasOfferCatalog of all 6 services scoped to that area, and aggregateRating. Lives in `seo.ts` (`areaLocalBusinessJsonLd`) and is mirrored in `postbuild.mjs`.
+- **"Direct answer" lead block** + **stats bullets** (30+ years, $2M liability, 5.0/47 reviews, same-day quotes, premium paints, warranty) injected into the hidden `.seo-prerender` content block on every service and area page — these are the #1 (+33.9%) and #2 (+32%) signals for AI-engine citation per Princeton/IIT Delhi GEO research.
+- The hidden `.seo-prerender` block on service / area pages now includes a real `<dl>` of Q&A in addition to the JSON-LD, so non-JS crawlers and LLMs can extract sourceable answers directly.
 
 ## Stack
 

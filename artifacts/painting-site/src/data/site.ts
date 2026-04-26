@@ -22,11 +22,20 @@ export const navServices = [
 ];
 
 export const navAreas = [
-  "Cedarville", "Brookhaven", "Maplewood", "Pinegrove", "Stoneridge",
-  "Oakhurst", "Riverbend", "Ashford", "Glenmont", "Westfield",
-  "Northpoint", "Southlake", "Easton", "Westbrook", "Fairview",
-  "Lakewood", "Highland", "Greenwood", "Crestview",
+  "Vero Beach", "Sebastian", "Fellsmere", "Indian River Shores", "Wabasso",
+  "Roseland", "Gifford", "Florida Ridge", "Vero Lake Estates", "Winter Beach",
+  "Orchid", "South Beach", "Central Beach", "Grand Harbor", "John's Island",
+  "Castaway Cove", "The Moorings", "Bent Pine", "Riomar",
 ];
+
+// Convert an area display name like "Indian River Shores" to its URL slug
+// "indian-river-shores". Must stay in sync with the slug logic in
+// scripts/postbuild.mjs so sitemap, prerender, and runtime routes all agree.
+export const areaSlug = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 
 export const services = [
   {

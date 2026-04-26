@@ -1,5 +1,5 @@
 import { MapPin } from "lucide-react";
-import { navAreas } from "@/data/site";
+import { areaSlug, navAreas } from "@/data/site";
 import { Link } from "react-router-dom";
 
 export const Areas = () => {
@@ -17,7 +17,7 @@ export const Areas = () => {
           {navAreas.map((area) => (
             <li key={area}>
               <Link
-                to={`/areas/${area.toLowerCase()}`}
+                to={`/areas/${areaSlug(area)}`}
                 className="group flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-3 text-sm font-medium transition-smooth hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
               >
                 <MapPin className="h-4 w-4 shrink-0 text-primary transition-smooth group-hover:scale-110" />

@@ -100,6 +100,55 @@ const services = [
   },
 ];
 
+// Per-service FAQs — "People Also Ask" / AI Overview goldmine.
+// Each FAQ becomes a Question/Answer pair in FAQPage JSON-LD AND a
+// human-visible Q&A block in the prerendered HTML so non-JS crawlers + LLMs
+// can extract direct, sourceable answers.
+const serviceFaqs = {
+  "interior-painting": [
+    ["How much does interior painting cost in Vero Beach, FL?", "Interior painting in Vero Beach typically runs $2.50–$6.00 per square foot of wall area, or roughly $400–$900 per average-size room. Final pricing depends on prep, ceiling height, number of colors, and trim work. Elite Painting Solutions provides free written estimates with no obligation."],
+    ["How long does it take to paint the interior of a house?", "A single-room interior repaint usually takes 1–2 days. A typical 2,000–2,500 sq ft Vero Beach home interior takes 4–7 working days, including prep, two finish coats, trim, and cleanup."],
+    ["What kind of paint do you use for interior walls?", "We use premium 100% acrylic, low-VOC and zero-VOC interior paints from Sherwin-Williams and Benjamin Moore. These hold color longer in Florida light, scrub easily, and are safe for kids, pets, and people with chemical sensitivity."],
+    ["Do I need to move my furniture before you start?", "No — our crew moves and protects furniture, covers floors with drop cloths, and removes outlet covers and switch plates. We re-set everything when the job is complete."],
+    ["How long should I wait before hanging things on freshly painted walls?", "Latex interior paint is dry to the touch in 1 hour and recoatable in 4 hours, but it does not fully cure for 14–30 days. Wait at least 7 days before hanging artwork or applying tape directly to the finish."],
+  ],
+  "exterior-painting": [
+    ["How much does exterior painting cost in Vero Beach?", "A standard 2,000 sq ft single-story Vero Beach home exterior typically costs $4,500–$8,500 to repaint, depending on substrate (stucco, hardie, wood, vinyl), prep needs, and trim complexity. Two-story homes and homes with significant rotted-trim repair price higher."],
+    ["How often should I repaint my exterior in Florida?", "Florida's UV, humidity, and salt air shorten exterior paint life. Stucco and hardie typically last 7–10 years with quality 100% acrylic paint, wood siding closer to 5–7 years, and trim/doors 3–5 years. Most Vero Beach homes benefit from a repaint every 7 years."],
+    ["What is the best time of year to paint the exterior of a house in Vero Beach?", "October through May. Lower humidity and fewer afternoon thunderstorms give paint time to cure properly. Summer is workable but requires early-morning starts and tight weather monitoring — we reschedule for rain at no charge."],
+    ["Do you pressure wash before exterior painting?", "Yes — every exterior project starts with a soft-wash pressure wash to remove algae, mildew, salt, and chalk. Without that step, paint cannot bond properly to the substrate. Pressure washing is included in our exterior quote."],
+    ["Will you paint over rotted wood or just replace it?", "We replace rot before we paint. Painting over soft, rotted, or termite-damaged wood traps moisture and the paint will fail in 1–2 seasons. We carpenter-repair fascia, soffit, window trim, and door jambs as part of the prep phase."],
+  ],
+  "cabinet-refinishing": [
+    ["How much does cabinet refinishing cost vs. replacement in Vero Beach?", "Cabinet refinishing in Vero Beach typically runs $2,500–$6,500 for an average kitchen — about 60–70% less than $10,000–$25,000 for replacement. You keep your existing layout, hardware, and storage, and the project finishes in days instead of weeks."],
+    ["How long does cabinet refinishing take?", "A typical Vero Beach kitchen takes 4–6 working days. We remove doors and drawer fronts day one, finish them off-site in a controlled spray booth, and prep the cabinet boxes in your kitchen between coats. You keep limited use of your kitchen most of the project."],
+    ["Will refinished cabinets hold up better than DIY?", "Yes. We sand, degrease, prime with adhesion-bonding bonding primer, and spray a urethane-acrylic enamel that cures to a factory-grade finish. Properly applied, our cabinet finish lasts 8–15 years versus 1–3 years for DIY brush-on enamels."],
+    ["Can you refinish oak cabinets so the grain doesn't show?", "Yes. Oak's open grain requires a specific high-build primer plus light filler before topcoats. We can deliver a fully grain-filled, smooth painted finish — or leave a hint of grain for a more natural look."],
+    ["Do you change cabinet hardware as part of refinishing?", "Optional. We can re-install your existing hardware or install new hardware you provide; if existing screw holes don't match new pulls, we patch and re-drill so your finished cabinets look factory-new."],
+  ],
+  "commercial-painting": [
+    ["Can you paint a commercial space without disrupting business?", "Yes. We schedule commercial painting in Vero Beach for nights, early mornings, weekends, or in clean phases that keep your storefront, office, or restaurant open. We use low-odor, zero-VOC paints whenever possible."],
+    ["Are you insured for commercial painting projects?", "Yes — Elite Painting Solutions carries $2,000,000 in general liability and full Florida workers' compensation coverage. We provide certificates of insurance to property managers, facility managers, and tenant-improvement contractors on request."],
+    ["What types of commercial properties do you paint?", "Offices, retail stores, restaurants, medical and dental buildings, condo associations, HOAs, multi-unit residential, schools, churches, parking garages, and industrial buildings throughout Indian River, Brevard, and St. Lucie counties."],
+    ["Do you provide line striping and parking lot painting?", "Yes — parking-stall striping, ADA accessible-spot markings, and curb painting are part of our commercial services. Most standard parking lots are striped in a single overnight visit."],
+    ["Can you handle a multi-phase HOA or condo exterior repaint?", "Yes. We coordinate with HOA boards and property managers, work building by building to minimize resident disruption, and provide weekly progress reports plus before/after photo documentation."],
+  ],
+  "pressure-washing": [
+    ["How much does pressure washing cost in Vero Beach?", "Most Vero Beach single-family home soft-washes run $250–$550, depending on home size and roof access. Driveways add $75–$200, and pool cages typically $200–$400. Bundling pressure washing with an exterior paint job typically saves 15–25%."],
+    ["Will pressure washing damage my stucco, wood, or screens?", "Not when done properly. We use soft-washing techniques and adjustable PSI for delicate surfaces. Stucco, soft wood, vinyl screens, and window seals are washed at low pressure with cleaning chemistry that does the work — the wand never blasts surfaces directly."],
+    ["How often should I pressure wash my house in Florida?", "In Vero Beach, exterior soft-washing is recommended every 12–18 months. Florida humidity grows algae, mildew, and lichen quickly, especially on north-facing and shaded walls. Annual washing extends paint life and prevents permanent staining."],
+    ["Do you remove stains from concrete and pavers?", "Yes — oil, rust, fertilizer stains, and red-clay tannins on driveways, sidewalks, and pool decks. We use concrete-safe degreasers and rust removers; some deeply set stains require specialty treatment we'll quote up front."],
+    ["Can you wash a pool cage or screen enclosure?", "Yes. We soft-wash aluminum frames and re-screened panels with cleaning chemistry that kills mildew without damaging screen mesh. We also clean roof tiles and bird-guarded eaves on the same trip."],
+  ],
+  "ceiling-services": [
+    ["How much does popcorn ceiling removal cost in Vero Beach?", "Popcorn ceiling removal in Vero Beach typically costs $1.50–$3.50 per square foot, including dust containment, scraping, skim coat, prime, and a finish coat of flat ceiling paint. A 1,500 sq ft home interior usually runs $2,500–$4,500."],
+    ["Is my old popcorn ceiling safe to remove?", "Popcorn ceilings installed before 1980 may contain asbestos. We arrange asbestos testing on any home built before 1980 before scraping. If asbestos is found, we coordinate licensed abatement and resume after clearance."],
+    ["Can you fix water-stained or sagging ceilings?", "Yes. We seal water stains with shellac-based stain blocker, repair drywall sag and tape damage, re-texture or smooth-finish, then prime and repaint. We also coordinate roof or plumbing source repair before re-finishing."],
+    ["What's the difference between knockdown, orange peel, and smooth ceilings?", "Smooth (Level 5) is the most modern look but requires the most prep and shows light most. Orange peel is a fine spatter texture that hides imperfections. Knockdown is sprayed and partially flattened with a trowel — a popular Florida choice for hiding minor drywall flaws."],
+    ["How long does popcorn ceiling removal take?", "Most single-room popcorn removals are completed in 2 days; a whole-home removal in 5–8 working days, including dust containment, scrape, skim, prime, and finish coat."],
+  ],
+};
+
 // Real Vero Beach FL service areas
 const areas = [
   "Vero Beach",
@@ -121,6 +170,53 @@ const areas = [
   "The Moorings",
   "Bent Pine",
   "Riomar",
+];
+
+// Approximate centroids for each Vero Beach service area, used to mint
+// area-specific GeoCoordinates in LocalBusiness JSON-LD per area page.
+// Source: USGS / Google Maps centroids, rounded to 4 decimals.
+const areaCoords = {
+  "Vero Beach": { lat: 27.6386, lng: -80.3973, postal: "32960" },
+  "Sebastian": { lat: 27.8161, lng: -80.4706, postal: "32958" },
+  "Fellsmere": { lat: 27.7672, lng: -80.6006, postal: "32948" },
+  "Indian River Shores": { lat: 27.7167, lng: -80.3781, postal: "32963" },
+  "Wabasso": { lat: 27.7536, lng: -80.4325, postal: "32970" },
+  "Roseland": { lat: 27.8431, lng: -80.4828, postal: "32957" },
+  "Gifford": { lat: 27.6739, lng: -80.4078, postal: "32967" },
+  "Florida Ridge": { lat: 27.5825, lng: -80.3898, postal: "32962" },
+  "Vero Lake Estates": { lat: 27.7083, lng: -80.5436, postal: "32967" },
+  "Winter Beach": { lat: 27.7164, lng: -80.4242, postal: "32970" },
+  "Orchid": { lat: 27.7847, lng: -80.4014, postal: "32963" },
+  "South Beach": { lat: 27.6028, lng: -80.3650, postal: "32963" },
+  "Central Beach": { lat: 27.6481, lng: -80.3622, postal: "32963" },
+  "Grand Harbor": { lat: 27.7083, lng: -80.4406, postal: "32967" },
+  "John's Island": { lat: 27.7044, lng: -80.3753, postal: "32963" },
+  "Castaway Cove": { lat: 27.6342, lng: -80.3592, postal: "32963" },
+  "The Moorings": { lat: 27.6411, lng: -80.3558, postal: "32963" },
+  "Bent Pine": { lat: 27.6533, lng: -80.4514, postal: "32966" },
+  "Riomar": { lat: 27.6586, lng: -80.3578, postal: "32963" },
+};
+
+// Generic area-page FAQs (templated with the area name at render time).
+// These mirror real "near me" queries that drive AI-Overview citations.
+const areaFaqTemplates = [
+  ["Do you serve {AREA}, FL?", "Yes — Elite Painting Solutions has been painting homes and businesses in {AREA}, FL for years. We service all of {AREA} and the surrounding Indian River County, with free same-day estimates."],
+  ["How much does it cost to paint a house in {AREA}?", "A standard 2,000 sq ft single-story home in {AREA} typically costs $4,500–$8,500 to repaint exterior, and $3,500–$7,500 for a full interior repaint. We give written estimates with no obligation."],
+  ["How fast can you start a painting job in {AREA}?", "Most {AREA} estimates are returned the same day, and we can typically start interior projects within 1–2 weeks and exterior projects within 2–4 weeks, weather permitting."],
+  ["Are you licensed and insured to paint in {AREA}?", "Yes. Elite Painting Solutions is fully licensed and carries $2,000,000 in general liability plus full workers' compensation, valid for {AREA} and all of Indian River County, FL."],
+  ["What painting services do you offer in {AREA}?", "Interior painting, exterior painting, cabinet refinishing, commercial painting, popcorn ceiling removal, drywall repair, and pressure washing — for homes, condos, HOAs, and businesses throughout {AREA}."],
+];
+
+// "BLUF" (bottom-line up front) direct-answer leads + key statistics.
+// Per Princeton/IIT Delhi GEO research these are the #1 (+33.9%) and #2
+// (+32%) signals that drive AI citation rates.
+const STATS_BULLETS = [
+  "<strong>30+ years</strong> of professional painting experience in Vero Beach and Indian River County, FL.",
+  "<strong>$2,000,000</strong> general liability insurance and full Florida workers' comp on every job.",
+  "<strong>5.0 / 5.0</strong> aggregate rating across 47+ verified Google, Yelp, Facebook, and Nextdoor reviews.",
+  "<strong>Same-day</strong> written estimates — most quotes returned within 4 business hours.",
+  "Premium <strong>Sherwin-Williams &amp; Benjamin Moore</strong> paints, including low-VOC and zero-VOC formulations.",
+  "Workmanship <strong>warranty</strong> on every interior, exterior, cabinet, and commercial project.",
 ];
 
 const blogPosts = [
@@ -252,6 +348,20 @@ const buildJsonLdForRoute = (route) => {
         { "@type": "ListItem", position: 2, name: route.title, item: `${SITE_URL}${route.path}` },
       ],
     });
+
+    // Per-service FAQPage — fuel for AI Overviews and "People Also Ask".
+    const sFaqs = serviceFaqs[route.slug];
+    if (sFaqs && sFaqs.length) {
+      blocks.push({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: sFaqs.map(([q, a]) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a },
+        })),
+      });
+    }
   }
 
   if (route.kind === "area") {
@@ -262,6 +372,71 @@ const buildJsonLdForRoute = (route) => {
         { "@type": "ListItem", position: 1, name: "Service Areas", item: `${SITE_URL}/#areas` },
         { "@type": "ListItem", position: 2, name: route.areaName, item: `${SITE_URL}${route.path}` },
       ],
+    });
+
+    // Per-area LocalBusiness with area-specific GeoCoordinates + service catalog.
+    // Critical local-SEO + GEO signal: tells search engines AND LLMs we
+    // physically serve this exact place.
+    const coords = areaCoords[route.areaName];
+    blocks.push({
+      "@context": "https://schema.org",
+      "@type": ["LocalBusiness", "HomeAndConstructionBusiness", "Painter"],
+      "@id": `${SITE_URL}${route.path}#business`,
+      name: `${SITE_NAME} — ${route.areaName}`,
+      description: `Licensed and insured painters serving ${route.areaName}, FL and surrounding Indian River County. Interior, exterior, cabinet, and commercial painting with free same-day estimates.`,
+      url: `${SITE_URL}${route.path}`,
+      telephone: SITE_PHONE_HREF.replace("tel:", ""),
+      image: OG_IMAGE,
+      priceRange: "$$",
+      areaServed: { "@type": "City", name: `${route.areaName}, FL` },
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: route.areaName,
+        addressRegion: "FL",
+        postalCode: coords?.postal || "32960",
+        addressCountry: "US",
+      },
+      ...(coords
+        ? {
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: coords.lat,
+              longitude: coords.lng,
+            },
+          }
+        : {}),
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: `Painting Services in ${route.areaName}, FL`,
+        itemListElement: services.map((s) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: `${s.title} in ${route.areaName}, FL`,
+            description: s.description,
+            url: `${SITE_URL}/services/${s.slug}`,
+          },
+        })),
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5.0",
+        reviewCount: "47",
+      },
+    });
+
+    // Per-area FAQPage built from the templates above.
+    blocks.push({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: areaFaqTemplates.map(([q, a]) => ({
+        "@type": "Question",
+        name: q.replaceAll("{AREA}", route.areaName),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: a.replaceAll("{AREA}", route.areaName),
+        },
+      })),
     });
   }
 
@@ -322,23 +497,55 @@ const buildSeoBlock = (route) => {
       <p>Email: <a href="mailto:eps.paintingsolutions@gmail.com">eps.paintingsolutions@gmail.com</a></p>
     `;
   } else if (route.kind === "service") {
+    const sFaqs = serviceFaqs[route.slug] || [];
     inner = `
       <h1>${escapeHtml(route.title)} in Vero Beach, FL</h1>
+      <p><strong>Direct answer:</strong> Elite Painting Solutions delivers professional ${escapeHtml(route.title.toLowerCase())} in Vero Beach and across Indian River County, FL. We are a fully licensed and insured painting company with 30+ years of experience, free same-day estimates, and a workmanship warranty on every project. Call <a href="${SITE_PHONE_HREF}">${escapeHtml(SITE_PHONE)}</a>.</p>
       <p>${escapeHtml(route.description)}</p>
+      <h2>Why Vero Beach Homeowners Pick Us for ${escapeHtml(route.title)}</h2>
+      <ul>
+        ${STATS_BULLETS.map((b) => `<li>${b}</li>`).join("\n        ")}
+      </ul>
+      <h2>What's Included in ${escapeHtml(route.title)}</h2>
       ${(route.body || []).map((p) => `<p>${escapeHtml(p)}</p>`).join("\n      ")}
+      <h2>${escapeHtml(route.title)} — Frequently Asked Questions</h2>
+      <dl>
+        ${sFaqs
+          .map(
+            ([q, a]) => `<dt><strong>${escapeHtml(q)}</strong></dt>\n        <dd>${escapeHtml(a)}</dd>`,
+          )
+          .join("\n        ")}
+      </dl>
       <h2>Service Area</h2>
       <p>We provide ${escapeHtml(route.title.toLowerCase())} throughout Indian River County, including ${areas.map((a) => escapeHtml(a)).join(", ")}.</p>
       <h2>Free Estimate</h2>
       ${businessLine}
     `;
   } else if (route.kind === "area") {
+    const aFaqs = areaFaqTemplates.map(([q, a]) => [
+      q.replaceAll("{AREA}", route.areaName),
+      a.replaceAll("{AREA}", route.areaName),
+    ]);
+    const coords = areaCoords[route.areaName];
     inner = `
       <h1>Painters in ${escapeHtml(route.areaName)}, FL</h1>
-      <p>Elite Painting Solutions provides expert interior, exterior, cabinet, and commercial painting in ${escapeHtml(route.areaName)}, Florida and the surrounding Indian River County area.</p>
-      <h2>Local Painting Services</h2>
+      <p><strong>Direct answer:</strong> Elite Painting Solutions is a top-rated painting company serving ${escapeHtml(route.areaName)}, Florida ${coords ? `(${coords.postal})` : ""} and the surrounding Indian River County. We provide free same-day estimates for interior painting, exterior painting, cabinet refinishing, popcorn ceiling removal, commercial painting, and pressure washing. Licensed, insured, and locally trusted for 30+ years. Call <a href="${SITE_PHONE_HREF}">${escapeHtml(SITE_PHONE)}</a>.</p>
+      <h2>Why ${escapeHtml(route.areaName)} Homeowners Choose Elite Painting Solutions</h2>
+      <ul>
+        ${STATS_BULLETS.map((b) => `<li>${b}</li>`).join("\n        ")}
+      </ul>
+      <h2>Local Painting Services in ${escapeHtml(route.areaName)}</h2>
       <ul>
         ${services.map((s) => `<li><strong>${escapeHtml(s.title)}</strong> — ${escapeHtml(s.description)}</li>`).join("\n        ")}
       </ul>
+      <h2>${escapeHtml(route.areaName)} Painting — Frequently Asked Questions</h2>
+      <dl>
+        ${aFaqs
+          .map(
+            ([q, a]) => `<dt><strong>${escapeHtml(q)}</strong></dt>\n        <dd>${escapeHtml(a)}</dd>`,
+          )
+          .join("\n        ")}
+      </dl>
       <p>Call ${escapeHtml(SITE_PHONE)} for a free same-day estimate in ${escapeHtml(route.areaName)}.</p>
       ${businessLine}
     `;

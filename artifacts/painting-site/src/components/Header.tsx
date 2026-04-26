@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 import { Logo } from "./Logo";
-import { navServices, navAreas, site } from "@/data/site";
+import { areaSlug, navServices, navAreas, site } from "@/data/site";
 import { cn } from "@/lib/utils";
 
 export const Header = ({ transparent = true }: { transparent?: boolean }) => {
@@ -26,7 +26,7 @@ export const Header = ({ transparent = true }: { transparent?: boolean }) => {
     {
       label: "Service Areas",
       href: "/#areas",
-      menu: navAreas.map((a) => ({ label: a, href: `/areas/${a.toLowerCase()}` })),
+      menu: navAreas.map((a) => ({ label: a, href: `/areas/${areaSlug(a)}` })),
     },
     { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
