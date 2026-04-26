@@ -1,9 +1,17 @@
 import { getUncachableGmailClient } from "./gmailClient";
 
 interface QuoteEmailParams {
-  to: string;
+  to: string | string[];
   name: string;
   phone: string;
+  message: string;
+  source: string;
+}
+
+interface QuoteSmsParams {
+  phoneDigits: string;
+  name: string;
+  callerPhone: string;
   message: string;
   source: string;
 }
@@ -27,11 +35,30 @@ const buildRawMessage = ({
   from: string;
   subject: string;
   text: string;
-  html: string;
+  html?: string;
 }) => {
-  const boundary = `----=_Part_${Date.now()}_${Math.floor(Math.random() * 1e9)}`;
   const encodedSubject = `=?utf-8?B?${Buffer.from(subject, "utf8").toString("base64")}?=`;
 
+  if (!html) {
+    const lines = [
+      `To: ${to}`,
+      `From: ${from}`,
+      `Subject: ${encodedSubject}`,
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=utf-8",
+      "Content-Transfer-Encoding: 7bit",
+      "",
+      text,
+      "",
+    ];
+    return Buffer.from(lines.join("\r\n"), "utf8")
+      .toString("base64")
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+  }
+
+  const boundary = `----=_Part_${Date.now()}_${Math.floor(Math.random() * 1e9)}`;
   const lines = [
     `To: ${to}`,
     `From: ${from}`,
@@ -72,7 +99,7 @@ export const sendQuoteEmail = async ({
   const gmail = await getUncachableGmailClient();
 
   const profile = await gmail.users.getProfile({ userId: "me" });
-  const fromAddress = profile.data.emailAddress ?? to;
+  const fromAddress = profile.data.emailAddress ?? (Array.isArray(to) ? to[0] : to);
 
   const subject = `New quote request — ${name}`;
 
@@ -108,16 +135,89 @@ export const sendQuoteEmail = async ({
     </div>
   `;
 
-  const raw = buildRawMessage({
-    to,
-    from: fromAddress,
-    subject,
-    text,
-    html,
-  });
+  const recipients = Array.isArray(to) ? to : [to];
 
-  await gmail.users.messages.send({
-    userId: "me",
-    requestBody: { raw },
-  });
+  for (const recipient of recipients) {
+    const raw = buildRawMessage({
+      to: recipient,
+      from: fromAddress,
+      subject,
+      text,
+      html,
+    });
+
+    await gmail.users.messages.send({
+      userId: "me",
+      requestBody: { raw },
+    });
+  }
+};
+
+/**
+ * Send a short text-friendly notification to a US phone number using
+ * carrier email-to-SMS gateways. Carrier-unknown numbers are blasted to
+ * every major gateway; the wrong-carrier ones bounce silently and the
+ * one matching the phone's carrier delivers as a regular text.
+ *
+ * This is a best-effort free fallback. For guaranteed delivery use Twilio
+ * or another paid SMS API.
+ */
+export const sendQuoteSmsViaGateway = async ({
+  phoneDigits,
+  name,
+  callerPhone,
+  message,
+  source,
+}: QuoteSmsParams) => {
+  const gmail = await getUncachableGmailClient();
+
+  const profile = await gmail.users.getProfile({ userId: "me" });
+  const fromAddress = profile.data.emailAddress ?? "noreply@example.com";
+
+  // Normalize to last 10 digits.
+  const ten = phoneDigits.replace(/\D/g, "").slice(-10);
+  if (ten.length !== 10) return;
+
+  // Common US carrier email-to-SMS gateways. We send to all of them; only
+  // the carrier matching the destination phone delivers, others bounce.
+  const gateways = [
+    "txt.att.net", // AT&T (SMS)
+    "tmomail.net", // T-Mobile / Sprint (SMS+MMS)
+    "vtext.com", // Verizon (SMS, mostly retired but still routes for some)
+    "vzwpix.com", // Verizon (MMS, currently the working path)
+    "messaging.sprintpcs.com", // legacy Sprint
+    "sms.myboostmobile.com", // Boost
+    "sms.cricketwireless.net", // Cricket
+    "mymetropcs.com", // Metro PCS
+    "email.uscc.net", // US Cellular
+    "msg.fi.google.com", // Google Fi
+    "vmobl.com", // Virgin
+  ];
+
+  // Texts must be SHORT to fit in a single SMS segment.
+  const trimmed = message.trim().replace(/\s+/g, " ").slice(0, 220);
+  const subject = `Quote: ${name}`.slice(0, 50);
+  const body = [
+    `New quote request`,
+    `Name: ${name}`,
+    `Tel:  ${callerPhone}`,
+    `Src:  ${source}`,
+    ``,
+    trimmed,
+  ].join("\n");
+
+  await Promise.allSettled(
+    gateways.map((gw) => {
+      const raw = buildRawMessage({
+        to: `${ten}@${gw}`,
+        from: fromAddress,
+        subject,
+        text: body,
+      });
+      return gmail.users.messages.send({
+        userId: "me",
+        requestBody: { raw },
+      });
+    }),
+  );
 };
