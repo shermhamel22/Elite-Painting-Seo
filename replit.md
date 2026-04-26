@@ -7,7 +7,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 ## Artifacts
 
 - **artifacts/painting-site** — Elite Painting Solutions marketing site (React + Vite). Vero Beach FL painters. Static prerender via `scripts/postbuild.mjs` produces per-route HTML with baked-in `<title>`, meta description, OG/Twitter cards, JSON-LD (Organization, LocalBusiness, FAQPage, Service, Article, BreadcrumbList) and a hidden `.seo-prerender` text block so non-JS crawlers and LLMs see real content. Production canonical: `https://elitepaintingsolutions.com` (override with `VITE_SITE_URL`).
-- **artifacts/api-server** — Express API for the quote form (Gmail send via `gmailClient.ts`, route `POST /api/quote`).
+- **artifacts/api-server** — Express API for the quote form (Gmail send via `gmailClient.ts`, route `POST /api/quote`). Quote handler also fans out a short SMS to `(321) 462-9989` via carrier email-to-SMS gateways (`txt.att.net`, `tmomail.net`, `vtext.com`, `vzwpix.com`, `messaging.sprintpcs.com`, `sms.myboostmobile.com`, `sms.cricketwireless.net`, `mymetropcs.com`, `email.uscc.net`, `msg.fi.google.com`, `vmobl.com`). Both channels REQUIRE the Gmail connection (`google-mail` connector). User dismissed the Gmail connect prompt once — re-propose if quote sends start failing with `401 Unauthorized`.
 - **artifacts/mockup-sandbox** — Vite mockup sandbox for iframe previews on the canvas.
 
 ## SEO + Performance Notes (painting-site)
